@@ -4,6 +4,12 @@ metadata:
   name: flask-app
 spec:
   replicas: 2
+  minReadySeconds: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 1
+      maxSurge: 1
   selector:
     matchLabels:
       app: flask-app
@@ -14,7 +20,7 @@ spec:
     spec:
       containers:
         - name: flask-app
-          image: mjb9353/todo-app:v1
+          image: mjb9353/todo-app:v2
           ports:
             - containerPort: 5000
           env:
