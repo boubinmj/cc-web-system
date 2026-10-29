@@ -6,13 +6,13 @@ import os
 
 mongodb_host = os.environ.get('MONGO_HOST', 'localhost')
 mongodb_port = int(os.environ.get('MONGO_PORT', '27017'))
-client = MongoClient(mongodb_host, mongodb_port)    #Configure the connection to the database
+client = MongoClient(mongodb_host, mongodb_port, serverSelectionTimeoutMS=2000)    # Adjust Timeout
 db = client.camp2016    #Select the database
 todos = db.todo #Select the collection
 
 app = Flask(__name__)
 title = "TODO with Flask"
-heading = "ToDo Reminder"
+heading = "ToDo Reminder **V2**"
 #modify=ObjectId()
 
 def redirect_url():
@@ -118,6 +118,33 @@ def search():
 @app.route("/about")
 def about():
 	return render_template('credits.html',t=title,h=heading)
+
+#### HEALTH CHECK ROUTES #####
+HEALTHY = True # Health Flag
+@app.route("/health")
+def health():
+    # Checks flask service
+    if HEALTHY:
+        return {"status": "ok"}, 200
+    return {"status": "unhealthy"}, 500
+
+@app.route("/ready")
+def ready():
+    # depends on MongoDB being available
+    try:
+        client.admin.command("ping")
+        return {"status": "ready"}, 200
+    except Exception:
+        return {"status": "mongo unavailable"}, 503
+
+@app.route("/fail")
+def fail():
+    # Deliberately break liveness, used to test the probe in Part 7
+    global HEALTHY
+    HEALTHY = False
+    return {"status": "liveness will now fail"}, 200
+
+#### HEALTH CHECK ROUTES #####
 
 if __name__ == "__main__":
 	env = os.environ.get('FLASK_ENV', 'development')
