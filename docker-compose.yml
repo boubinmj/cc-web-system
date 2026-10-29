@@ -1,11 +1,12 @@
 services:
   flask-app:
-    image: flask-service          # the image you just built with the CLI
+    build: .
+    image: mjb9353/todo-app:v1
     container_name: flask-app
     ports:
-      - "5000:5000"                # host:container
+      - "5000:5000"
     environment:
-      MONGO_HOST: mongodb          # matches the Mongo service name below
+      MONGO_HOST: mongodb
       MONGO_PORT: "27017"
     depends_on:
       - mongodb
@@ -14,9 +15,9 @@ services:
     image: mongo:7
     container_name: mongodb
     ports:
-      - "27017:27017"              # optional; lets you inspect the DB from your machine
+      - "27017:27017"
     volumes:
-      - mongo-data:/data/db        # persists database files across container restarts
+      - mongo-data:/data/db
 
 volumes:
   mongo-data:
