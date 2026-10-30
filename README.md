@@ -2,7 +2,7 @@
 
 A simple to-do list web app built with Flask and MongoDB, packaged with Docker and deployable to Kubernetes (local cluster or AWS EKS).
 
-![Screenshot](static/images/screenshot.jpg)
+![Screenshot](static/images/screenshot.png)
 
 ## Features
 
