@@ -5,4 +5,4 @@ venv/
 .envmonitoring/values.yaml
 monitoring/
 monitoring/values.yaml
-.env.env
+.env
