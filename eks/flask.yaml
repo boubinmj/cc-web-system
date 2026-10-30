@@ -23,6 +23,20 @@ spec:
           image: mjb9353/todo-app:v2
           ports:
             - containerPort: 5000
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 5000
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /ready
+              port: 5000
+            initialDelaySeconds: 3
+            periodSeconds: 5
+            failureThreshold: 2
           env:
             - name: MONGO_HOST
               value: "mongo"
